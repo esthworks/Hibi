@@ -62,3 +62,17 @@ p {
     opacity: 0.8;
     line-height: 1.4;
 }
+.mood-button {
+    font-size: 28px;
+    margin: 6px;
+    padding: 8px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+}
+
+.mood-button.active {
+    transform: scale(1.2);
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+}

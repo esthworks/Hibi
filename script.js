@@ -1,13 +1,17 @@
 const checkboxes = document.querySelectorAll("input[type='checkbox']");
-const scoreDisplay = document.getElementById("score");
-const today = new Date().toISOString().split("T")[0];
-const totalDisplay = document.getElementById("total");
 const scoreMoiDisplay = document.getElementById("score-moi");
 const totalMoiDisplay = document.getElementById("total-moi");
-
 const scoreChatsDisplay = document.getElementById("score-chats");
 const totalChatsDisplay = document.getElementById("total-chats");
 const historyDisplay = document.getElementById("history");
+const moodButtons = document.querySelectorAll(".mood-button");
+const selectedMoodDisplay = document.getElementById("selected-mood");
+
+const today = new Date().toISOString().split("T")[0];
+
+const allData = JSON.parse(localStorage.getItem("hibi")) || {};
+const todayData = allData[today] || {};
+
 const labels = {
     eau: "Boire de l’eau",
     bouger: "Bouger",
@@ -18,9 +22,11 @@ const labels = {
     litiere: "Litière"
 };
 
-// Charger les données du jour
-const allData = JSON.parse(localStorage.getItem("hibi")) || {};
-const todayData = allData[today] || {};
+let selectedMood = todayData.mood || null;
+
+if (selectedMood) {
+    selectedMoodDisplay.textContent = selectedMood;
+}
 
 checkboxes.forEach((checkbox) => {
     if (todayData[checkbox.id] === true) {
@@ -28,11 +34,9 @@ checkboxes.forEach((checkbox) => {
     }
 });
 
-// Calcul du score
 function updateScore() {
     let scoreMoi = 0;
     let totalMoi = 0;
-
     let scoreChats = 0;
     let totalChats = 0;
 
@@ -50,12 +54,10 @@ function updateScore() {
 
     scoreMoiDisplay.textContent = scoreMoi;
     totalMoiDisplay.textContent = totalMoi;
-
     scoreChatsDisplay.textContent = scoreChats;
     totalChatsDisplay.textContent = totalChats;
 }
 
-// Sauvegarde
 function saveData() {
     const allData = JSON.parse(localStorage.getItem("hibi")) || {};
     const todayData = {};
@@ -64,21 +66,12 @@ function saveData() {
         todayData[checkbox.id] = checkbox.checked;
     });
 
-    allData[today] = todayData;
+    todayData.mood = selectedMood;
 
+    allData[today] = todayData;
     localStorage.setItem("hibi", JSON.stringify(allData));
 }
 
-// Écouter les changements
-checkboxes.forEach((checkbox) => {
-    checkbox.addEventListener("change", () => {
-        updateScore();
-        saveData();
-    });
-});
-
-// Initialisation
-updateScore();
 function getDateKey(daysAgo) {
     const date = new Date();
     date.setDate(date.getDate() - daysAgo);
@@ -95,13 +88,13 @@ function getDayLabel(daysAgo) {
 function summarizeDay(data) {
     let scoreMoi = 0;
     let totalMoi = 0;
-
     let scoreChats = 0;
     let totalChats = 0;
-
     let doneItems = [];
 
     Object.keys(data).forEach((id) => {
+        if (id === "mood") return;
+
         const isChecked = data[id];
 
         if (id === "nourriture" || id === "litiere") {
@@ -122,12 +115,17 @@ function summarizeDay(data) {
     const summary = "Moi : " + scoreMoi + " / " + totalMoi +
         " | Chats : " + scoreChats + " / " + totalChats;
 
-    const details = doneItems.length > 0
-    ? "<br><span class='details'>✔ " + doneItems.join(" ✔ ") + "</span>"
-    : "";
+    const moodText = data.mood
+        ? "<br><span class='details'>Mood : " + data.mood + "</span>"
+        : "";
 
-return summary + details;
+    const details = doneItems.length > 0
+        ? "<br><span class='details'>✔ " + doneItems.join(" ✔ ") + "</span>"
+        : "";
+
+    return summary + moodText + details;
 }
+
 function displayHistory() {
     const allData = JSON.parse(localStorage.getItem("hibi")) || {};
     historyDisplay.innerHTML = "";
@@ -148,4 +146,25 @@ function displayHistory() {
     }
 }
 
+checkboxes.forEach((checkbox) => {
+    checkbox.addEventListener("change", () => {
+        updateScore();
+        saveData();
+        displayHistory();
+    });
+});
+
+moodButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+        selectedMood = button.textContent;
+        selectedMoodDisplay.textContent = selectedMood;
+
+        moodButtons.forEach((b) => b.classList.remove("active"));
+        button.classList.add("active");
+
+        saveData();
+        displayHistory();
+    });
+});
+updateScore();
 displayHistory();
