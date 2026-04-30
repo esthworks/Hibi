@@ -111,6 +111,20 @@ function summarizeDay(data) {
             }
         }
     });
+
+    const moodLine = data.mood
+        ? data.mood + "<br>"
+        : "";
+
+    const summary = "Moi : " + scoreMoi + " / " + totalMoi +
+        " | Chats : " + scoreChats + " / " + totalChats;
+
+    const details = doneItems.length > 0
+        ? "<br><span class='details'>✔ " + doneItems.join(" ✔ ") + "</span>"
+        : "";
+
+    return moodLine + summary + details;
+}
 const summary = "Moi : " + scoreMoi + " / " + totalMoi +
     " | Chats : " + scoreChats + " / " + totalChats;
     const summary = "Moi : " + scoreMoi + " / " + totalMoi +
