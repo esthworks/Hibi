@@ -126,16 +126,6 @@ function summarizeDay(data) {
     return moodLine + summary + details;
 }
 
-    const summary = "Moi : " + scoreMoi + " / " + totalMoi +
-        " | Chats : " + scoreChats + " / " + totalChats;
-
-    const details = doneItems.length > 0
-        ? "<br><span class='details'>✔ " + doneItems.join(" ✔ ") + "</span>"
-        : "";
-
-    return moodLine + summary + details;
-}
-
 function displayHistory() {
     const allData = JSON.parse(localStorage.getItem("hibi")) || {};
     historyDisplay.innerHTML = "";
