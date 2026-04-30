@@ -68,15 +68,17 @@ async function saveData() {
 
     todayData.mood = selectedMood;
 
+    const payload = {
+        date: today,
+        data: todayData,
+        user_key: "nekonimbus"
+    };
+
+    console.log("DATA ENVOYÉE :", payload);
+
     const { data, error } = await supabaseClient
         .from("hibi_entries")
-        .upsert([
-            {
-                date: today,
-                data: todayData,
-                user_key: "nekonimbus"
-            }
-        ]);
+        .upsert([payload]);
 
     if (error) {
         console.error("Erreur sauvegarde :", error);
