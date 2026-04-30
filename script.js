@@ -59,8 +59,7 @@ function updateScore() {
     totalChatsDisplay.textContent = totalChats;
 }
 
-function saveData() {
-    const allData = JSON.parse(localStorage.getItem("hibi")) || {};
+async function saveData() {
     const todayData = {};
 
     checkboxes.forEach((checkbox) => {
@@ -69,8 +68,20 @@ function saveData() {
 
     todayData.mood = selectedMood;
 
-    allData[today] = todayData;
-    localStorage.setItem("hibi", JSON.stringify(allData));
+    const { data, error } = await supabaseClient
+        .from("hibi_entries")
+        .upsert([
+            {
+                date: today,
+                data: todayData
+            }
+        ]);
+
+    if (error) {
+        console.error("Erreur sauvegarde :", error);
+    } else {
+        console.log("Sauvegardé dans Supabase");
+    }
 }
 
 function getDateKey(daysAgo) {
