@@ -1,3 +1,4 @@
+console.log("Supabase connecté ?", supabase);
 const checkboxes = document.querySelectorAll("input[type='checkbox']");
 const scoreMoiDisplay = document.getElementById("score-moi");
 const totalMoiDisplay = document.getElementById("total-moi");

@@ -51,7 +51,15 @@
     </section>
 
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-<script src="script.js?v=5"></script>
+<script>
+    const supabaseClient = supabase.createClient(
+        "https://supabase.com/dashboard/project/pgsmtxklaamnjeyxfzaz",
+        "sb_publishable_xXFacfdw2MIFsFR7ZgCMxA_FQ1HS5P5"
+    );
+</script>
+
+<script src="script.js?v=6"></script>
 </body>
 </html>
