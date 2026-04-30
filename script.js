@@ -74,6 +74,7 @@ async function saveData() {
             {
                 date: today,
                 data: todayData
+                user_key: "nekonimbus"
             }
         ]);
 
