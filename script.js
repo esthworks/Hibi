@@ -73,7 +73,7 @@ async function saveData() {
         .upsert([
             {
                 date: today,
-                data: todayData
+                data: todayData,
                 user_key: "nekonimbus"
             }
         ]);
