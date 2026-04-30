@@ -125,8 +125,7 @@ function summarizeDay(data) {
 
     return moodLine + summary + details;
 }
-const summary = "Moi : " + scoreMoi + " / " + totalMoi +
-    " | Chats : " + scoreChats + " / " + totalChats;
+
     const summary = "Moi : " + scoreMoi + " / " + totalMoi +
         " | Chats : " + scoreChats + " / " + totalChats;
 
