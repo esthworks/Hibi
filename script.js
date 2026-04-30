@@ -111,19 +111,16 @@ function summarizeDay(data) {
             }
         }
     });
-
+const summary = "Moi : " + scoreMoi + " / " + totalMoi +
+    " | Chats : " + scoreChats + " / " + totalChats;
     const summary = "Moi : " + scoreMoi + " / " + totalMoi +
         " | Chats : " + scoreChats + " / " + totalChats;
-
-    const moodText = data.mood
-        ? "<br><span class='details'>Mood : " + data.mood + "</span>"
-        : "";
 
     const details = doneItems.length > 0
         ? "<br><span class='details'>✔ " + doneItems.join(" ✔ ") + "</span>"
         : "";
 
-    return summary + moodText + details;
+    return moodLine + summary + details;
 }
 
 function displayHistory() {
