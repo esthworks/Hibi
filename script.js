@@ -114,6 +114,7 @@ async function saveData() {
 
     appData[today] = todayData;
     displayHistory();
+    updateInsights();
 
     console.log("Sauvegardé dans Supabase");
 }
@@ -142,6 +143,7 @@ async function loadData() {
 
     applyTodayData();
     displayHistory();
+    updateInsights();
 }
 
 function getDayLabel(daysAgo) {
@@ -188,6 +190,103 @@ function summarizeDay(data) {
         : "";
 
     return moodLine + summary + details;
+}
+function getSelfCareScore(dayData) {
+    let score = 0;
+
+    Object.keys(dayData).forEach((id) => {
+        if (id === "nourriture" || id === "litiere" || id === "mood") return;
+        if (dayData[id]) score++;
+    });
+
+    return score;
+}
+
+function computeCareStreak() {
+    let streak = 0;
+    let i = 0;
+
+    while (true) {
+        const dateKey = getDateKey(i);
+        const dayData = appData[dateKey];
+
+        if (!dayData) break;
+
+        if (getSelfCareScore(dayData) >= 3) {
+            streak++;
+            i++;
+        } else {
+            break;
+        }
+    }
+
+    return streak;
+}
+
+function computeMoodWarningDays() {
+    let count = 0;
+    let i = 0;
+
+    while (true) {
+        const dateKey = getDateKey(i);
+        const dayData = appData[dateKey];
+
+        if (!dayData || !dayData.mood) break;
+
+        if (dayData.mood === "🥱" || dayData.mood === "😢") {
+            count++;
+            i++;
+        } else {
+            break;
+        }
+    }
+
+    return count;
+}
+
+function computeLitterWarningDays() {
+    let count = 0;
+    let i = 0;
+
+    while (true) {
+        const dateKey = getDateKey(i);
+        const dayData = appData[dateKey];
+
+        if (!dayData) break;
+
+        if (dayData.litiere !== true) {
+            count++;
+            i++;
+        } else {
+            break;
+        }
+    }
+
+    return count;
+}
+
+function updateInsights() {
+    const careStreak = computeCareStreak();
+    document.getElementById("care-streak").textContent =
+        "🌱 " + careStreak + " jours soin de moi";
+
+    const moodDays = computeMoodWarningDays();
+    const moodWarning = document.getElementById("mood-warning");
+
+    if (moodDays >= 3) {
+        moodWarning.textContent = "🫶 Petit signal : mood bas depuis " + moodDays + " jours";
+    } else {
+        moodWarning.textContent = "";
+    }
+
+    const litterDays = computeLitterWarningDays();
+    const litterWarning = document.getElementById("litter-warning");
+
+    if (litterDays >= 3) {
+        litterWarning.textContent = "🐱 Litière à vérifier : pas cochée depuis " + litterDays + " jours";
+    } else {
+        litterWarning.textContent = "";
+    }
 }
 
 function displayHistory() {
