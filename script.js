@@ -283,7 +283,7 @@ function updateInsights() {
     const litterWarning = document.getElementById("litter-warning");
 
     if (litterDays >= 3) {
-        litterWarning.textContent = "🐱 Litière à vérifier : pas cochée depuis " + litterDays + " jours";
+        litterWarning.textContent = "😾 Litière à vérifier : pas cochée depuis " + litterDays + " jours";
     } else {
         litterWarning.textContent = "";
     }

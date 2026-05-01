@@ -41,7 +41,7 @@ section {
 
 label {
      display: block;
-    padding: 10px 0;
+    padding: 8px 0;
     font-size: 20px;
     letter-spacing: -0.3px;
 }
@@ -62,6 +62,7 @@ p {
     font-size: 15px;
     opacity: 0.8;
 }
+
 .details {
     display: block;
     margin-top: 6px;
@@ -69,6 +70,7 @@ p {
     opacity: 0.8;
     line-height: 1.4;
 }
+
 .mood-button {
     font-size: 28px;
     margin: 6px;
@@ -82,13 +84,21 @@ p {
 .mood-button.active {
     transform: scale(1.2);
 }
+
 .summary-line {
     font-weight: 500;
     margin-bottom: 10px;
+    font-size: 16px;
+}
+
+#care-streak {
+    margin: 6px 0;
+    font-weight: 500;
 }
 
 #mood-warning,
-#litter-warning,
-#care-streak {
+#litter-warning {
     margin: 6px 0;
+    opacity: 0.85;
+    font-size: 15px;
 }
