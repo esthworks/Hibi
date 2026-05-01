@@ -2,58 +2,63 @@
 <html>
 <head>
     <title>Hibi</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css?v=30">
     <link href="https://fonts.googleapis.com/css2?family=Amatic+SC:wght@700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
 <main>
 
-    <h1>Hibi 🪴 </h1>
+    <h1>Hibi 🪴</h1>
 
     <section>
-    <h3>Mood</h3>
+        <h2>Aujourd’hui 🧭</h2>
 
-    <button class="mood-button" data-mood="🥱">🥱</button>
-    <button class="mood-button" data-mood="😢">😢</button>
-    <button class="mood-button" data-mood="🙂">🙂</button>
-    <button class="mood-button" data-mood="😄">😄</button>
+        <p class="summary-line">
+            Moi : <span id="score-moi">0</span>/<span id="total-moi">0</span>
+            ·
+            Chats : <span id="score-chats">0</span>/<span id="total-chats">0</span>
+        </p>
 
-    <p>Humeur sélectionnée : <span id="selected-mood">aucune</span></p>
-</section>
+        <p id="care-streak">🌱 0 jours soin de moi</p>
+        <p id="mood-warning"></p>
+        <p id="litter-warning"></p>
+    </section>
 
     <section>
-        <h2>Aujourd’hui 🧭 </h2>
+        <h3>Mood</h3>
 
+        <button class="mood-button" data-mood="🥱">🥱</button>
+        <button class="mood-button" data-mood="😢">😢</button>
+        <button class="mood-button" data-mood="🙂">🙂</button>
+        <button class="mood-button" data-mood="😄">😄</button>
+
+        <p>Humeur sélectionnée : <span id="selected-mood">aucune</span></p>
+    </section>
+
+    <section>
+        <h3>Check du jour</h3>
+
+        <h4>Moi</h4>
         <label><input type="checkbox" id="eau"> Boire de l’eau</label>
         <label><input type="checkbox" id="bouger"> Bouger</label>
         <label><input type="checkbox" id="air"> Prendre l’air</label>
         <label><input type="checkbox" id="lire"> Lire</label>
         <label><input type="checkbox" id="craft"> Craft</label>
-    </section>
 
-    <section>
-        <h3>Chats 🐱</h3>
-
+        <h4>Chats</h4>
         <label><input type="checkbox" id="nourriture"> Eau / nourriture</label>
         <label><input type="checkbox" id="litiere"> Litière</label>
     </section>
 
     <section>
-        <p>Moi : <span id="score-moi">0</span>/<span id="total-moi">0</span></p>
-        <p>Chats : <span id="score-chats">0</span>/<span id="total-chats">0</span></p>
-    </section>
-    <p id="care-streak">🌱 0 jours soin de moi</p>
-<p id="mood-warning"></p>
-<p id="litter-warning"></p>
-
-    <section>
-    <h3>Derniers jours</h3>
-    <div id="history"></div>
+        <h3>Derniers jours</h3>
+        <div id="history"></div>
     </section>
 
 </main>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
 <script>
@@ -63,6 +68,6 @@
     );
 </script>
 
-<script src="script.js?v=6"></script>
+<script src="script.js?v=30"></script>
 </body>
 </html>
