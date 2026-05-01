@@ -9,7 +9,18 @@ const historyDisplay = document.getElementById("history");
 const moodButtons = document.querySelectorAll(".mood-button");
 const selectedMoodDisplay = document.getElementById("selected-mood");
 
-const today = new Date().toISOString().split("T")[0];
+function getDateKey(daysAgo = 0) {
+    const date = new Date();
+    date.setDate(date.getDate() - daysAgo);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    return `${year}-${month}-${day}`;
+}
+
+const today = getDateKey(0);
 
 const labels = {
     eau: "Boire de l’eau",
@@ -21,6 +32,7 @@ const labels = {
     litiere: "Litière"
 };
 
+let appData = {};
 let selectedMood = null;
 
 function updateScore() {
@@ -47,7 +59,7 @@ function updateScore() {
     totalChatsDisplay.textContent = totalChats;
 }
 
-async function saveData() {
+function getTodayDataFromScreen() {
     const todayData = {};
 
     checkboxes.forEach((checkbox) => {
@@ -55,6 +67,33 @@ async function saveData() {
     });
 
     todayData.mood = selectedMood;
+
+    return todayData;
+}
+
+function applyTodayData() {
+    const todayData = appData[today] || {};
+
+    checkboxes.forEach((checkbox) => {
+        checkbox.checked = todayData[checkbox.id] === true;
+    });
+
+    selectedMood = todayData.mood || null;
+    selectedMoodDisplay.textContent = selectedMood || "aucune";
+
+    moodButtons.forEach((button) => {
+        button.classList.remove("active");
+
+        if (button.textContent === selectedMood) {
+            button.classList.add("active");
+        }
+    });
+
+    updateScore();
+}
+
+async function saveData() {
+    const todayData = getTodayDataFromScreen();
 
     const payload = {
         date: today,
@@ -64,15 +103,19 @@ async function saveData() {
 
     console.log("DATA ENVOYÉE :", payload);
 
-    const { data, error } = await supabaseClient
+    const { error } = await supabaseClient
         .from("hibi_entries")
         .insert([payload]);
 
     if (error) {
         console.error("Erreur sauvegarde :", error);
-    } else {
-        console.log("Sauvegardé dans Supabase");
+        return;
     }
+
+    appData[today] = todayData;
+    displayHistory();
+
+    console.log("Sauvegardé dans Supabase");
 }
 
 async function loadData() {
@@ -80,7 +123,7 @@ async function loadData() {
         .from("hibi_entries")
         .select("*")
         .eq("user_key", "nekonimbus")
-        .order("date", { ascending: false });
+        .order("created_at", { ascending: true });
 
     if (error) {
         console.error("Erreur chargement :", error);
@@ -89,19 +132,16 @@ async function loadData() {
 
     console.log("Données Supabase :", data);
 
-    const cloudData = {};
+    appData = {};
 
     data.forEach((entry) => {
-        cloudData[entry.date] = entry.data;
+        appData[entry.date] = entry.data;
     });
 
-    console.log("Données transformées :", cloudData);
-}
+    console.log("Données transformées :", appData);
 
-function getDateKey(daysAgo) {
-    const date = new Date();
-    date.setDate(date.getDate() - daysAgo);
-    return date.toISOString().split("T")[0];
+    applyTodayData();
+    displayHistory();
 }
 
 function getDayLabel(daysAgo) {
@@ -138,9 +178,7 @@ function summarizeDay(data) {
         }
     });
 
-    const moodLine = data.mood
-        ? data.mood + "<br>"
-        : "";
+    const moodLine = data.mood ? data.mood + "<br>" : "";
 
     const summary = "Moi : " + scoreMoi + " / " + totalMoi +
         " | Chats : " + scoreChats + " / " + totalChats;
@@ -153,12 +191,11 @@ function summarizeDay(data) {
 }
 
 function displayHistory() {
-    const allData = JSON.parse(localStorage.getItem("hibi")) || {};
     historyDisplay.innerHTML = "";
 
     for (let i = 0; i < 3; i++) {
         const dateKey = getDateKey(i);
-        const dayData = allData[dateKey];
+        const dayData = appData[dateKey];
 
         const paragraph = document.createElement("p");
 
@@ -176,7 +213,6 @@ checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
         updateScore();
         saveData();
-        displayHistory();
     });
 });
 
@@ -189,10 +225,7 @@ moodButtons.forEach((button) => {
         button.classList.add("active");
 
         saveData();
-        displayHistory();
     });
 });
 
-updateScore();
-displayHistory();
 loadData();
