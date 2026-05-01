@@ -105,7 +105,7 @@ async function saveData() {
 
     const { error } = await supabaseClient
         .from("hibi_entries")
-        .insert([payload]);
+        .upsert([payload], { onConflict: "date,user_key" })
 
     if (error) {
         console.error("Erreur sauvegarde :", error);
