@@ -73,12 +73,24 @@ async function saveData() {
         data: todayData,
         user_key: "nekonimbus"
     };
+    async function loadData() {
+    const { data, error } = await supabaseClient
+        .from("hibi_entries")
+        .select("*")
+        .eq("user_key", "nekonimbus");
+
+    if (error) {
+        console.error("Erreur chargement :", error);
+    } else {
+        console.log("Données Supabase :", data);
+    }
+}
 
     console.log("DATA ENVOYÉE :", payload);
 
     const { data, error } = await supabaseClient
         .from("hibi_entries")
-        .insert([payload]);
+        .upsert([payload]);
 
     if (error) {
         console.error("Erreur sauvegarde :", error);
@@ -183,3 +195,4 @@ moodButtons.forEach((button) => {
 });
 updateScore();
 displayHistory();
+loadData();
