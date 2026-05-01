@@ -1,4 +1,5 @@
-console.log("Supabase connecté ?", supabase);
+console.log("Supabase connecté ?", supabaseClient);
+
 const checkboxes = document.querySelectorAll("input[type='checkbox']");
 const scoreMoiDisplay = document.getElementById("score-moi");
 const totalMoiDisplay = document.getElementById("total-moi");
@@ -10,9 +11,6 @@ const selectedMoodDisplay = document.getElementById("selected-mood");
 
 const today = new Date().toISOString().split("T")[0];
 
-const allData = JSON.parse(localStorage.getItem("hibi")) || {};
-const todayData = allData[today] || {};
-
 const labels = {
     eau: "Boire de l’eau",
     bouger: "Bouger",
@@ -23,17 +21,7 @@ const labels = {
     litiere: "Litière"
 };
 
-let selectedMood = todayData.mood || null;
-
-if (selectedMood) {
-    selectedMoodDisplay.textContent = selectedMood;
-}
-
-checkboxes.forEach((checkbox) => {
-    if (todayData[checkbox.id] === true) {
-        checkbox.checked = true;
-    }
-});
+let selectedMood = null;
 
 function updateScore() {
     let scoreMoi = 0;
@@ -73,7 +61,21 @@ async function saveData() {
         data: todayData,
         user_key: "nekonimbus"
     };
-    async function loadData() {
+
+    console.log("DATA ENVOYÉE :", payload);
+
+    const { data, error } = await supabaseClient
+        .from("hibi_entries")
+        .insert([payload]);
+
+    if (error) {
+        console.error("Erreur sauvegarde :", error);
+    } else {
+        console.log("Sauvegardé dans Supabase");
+    }
+}
+
+async function loadData() {
     const { data, error } = await supabaseClient
         .from("hibi_entries")
         .select("*")
@@ -83,19 +85,6 @@ async function saveData() {
         console.error("Erreur chargement :", error);
     } else {
         console.log("Données Supabase :", data);
-    }
-}
-
-    console.log("DATA ENVOYÉE :", payload);
-
-    const { data, error } = await supabaseClient
-        .from("hibi_entries")
-        .upsert([payload]);
-
-    if (error) {
-        console.error("Erreur sauvegarde :", error);
-    } else {
-        console.log("Sauvegardé dans Supabase");
     }
 }
 
@@ -193,6 +182,7 @@ moodButtons.forEach((button) => {
         displayHistory();
     });
 });
+
 updateScore();
 displayHistory();
 loadData();
