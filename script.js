@@ -79,13 +79,23 @@ async function loadData() {
     const { data, error } = await supabaseClient
         .from("hibi_entries")
         .select("*")
-        .eq("user_key", "nekonimbus");
+        .eq("user_key", "nekonimbus")
+        .order("date", { ascending: false });
 
     if (error) {
         console.error("Erreur chargement :", error);
-    } else {
-        console.log("Données Supabase :", data);
+        return;
     }
+
+    console.log("Données Supabase :", data);
+
+    const cloudData = {};
+
+    data.forEach((entry) => {
+        cloudData[entry.date] = entry.data;
+    });
+
+    console.log("Données transformées :", cloudData);
 }
 
 function getDateKey(daysAgo) {
