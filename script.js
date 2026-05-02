@@ -204,7 +204,7 @@ function getSelfCareScore(dayData) {
 
 function computeCareStreak() {
     let streak = 0;
-    let i = 0;
+    let i = 1;
 
     while (true) {
         const dateKey = getDateKey(i);
