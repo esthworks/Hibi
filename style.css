@@ -1,7 +1,7 @@
 body {
     font-family: DM Sans, sans-serif;
-    background: #6f8f86; /* vert foncé profond */
-    color: #2a2a2a;
+    background: #8fa79f; /* vert foncé profond */
+    color: #2f4f46;
     margin: 0;
     padding: 24px;
 }
@@ -28,7 +28,7 @@ h3 {
 }
 
 section {
-    background: #f7f7f5;
+    background: #f3f2ee;
     padding: 12px 14px;
     border-radius: 18px;
     margin: 12px 0;
@@ -56,7 +56,7 @@ label {
 input[type="checkbox"] {
     transform: scale(1.6);
     margin-right: 12px;
-    accent-color: #d16a4a; /* terracotta fort */
+    accent-color: #d87a5c; /* terracotta fort */
 }
 
 p {
