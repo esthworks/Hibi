@@ -19,29 +19,35 @@ h1 {
     color: #ffffff; /* blanc pour ressortir */
 }
 
-h2, h3 {
-    margin-top: 0;
-    margin-bottom: 12px;
-    color: #2e5b50;
+h2 {
+    font-size: 24px;
 }
 
-h4 {
-    margin: 18px 0 8px;
-    color: #2e5b50;
-    font-size: 17px;
+h3 {
+    font-size: 20px;
 }
 
 section {
     background: #ffffff;
-    padding: 14px 16px;
+    padding: 12px 14px;
     border-radius: 18px;
-    margin: 14px 0;
+    margin: 12px 0;
     box-shadow: 0 10px 25px rgba(0,0,0,0.25);
 }
 
+section:nth-of-type(2) {
+    text-align: center;
+}
+
+section:nth-of-type(2) h3,
+section:nth-of-type(2) p {
+    text-align: left;
+}
+
+
 label {
      display: block;
-    padding: 8px 0;
+    padding: 7px 0;
     font-size: 20px;
     letter-spacing: -0.3px;
 }
@@ -72,9 +78,9 @@ p {
 }
 
 .mood-button {
-    font-size: 28px;
-    margin: 6px;
-    padding: 8px;
+    font-size: 30px;
+    margin: 4px;
+    padding: 6px;
     border: none;
     background: transparent;
     cursor: pointer;
@@ -101,4 +107,14 @@ p {
     margin: 6px 0;
     opacity: 0.85;
     font-size: 15px;
+}
+#history p {
+    font-size: 14px;
+    opacity: 0.78;
+    line-height: 1.35;
+    margin: 8px 0;
+}
+
+#history .details {
+    font-size: 13px;
 }
