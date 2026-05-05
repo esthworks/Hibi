@@ -308,6 +308,70 @@ function displayHistory() {
     }
 }
 
+async function loadContacts() {
+    const { data, error } = await supabaseClient
+        .from("hibi_contacts")
+        .select("*")
+        .eq("user_key", "nekonimbus")
+        .order("last_contact", { ascending: false });
+
+    if (error) {
+        console.error("Erreur contacts :", error);
+        return;
+    }
+
+    console.log("Contacts :", data);
+    displayContacts(data);
+}
+
+function formatDaysAgo(dateStr) {
+    const today = new Date();
+    const date = new Date(dateStr);
+    const diff = Math.floor((today - date) / (1000 * 60 * 60 * 24));
+
+    if (diff === 0) return "aujourd’hui";
+    if (diff === 1) return "hier";
+    return "il y a " + diff + " jours";
+}
+
+function displayContacts(contacts) {
+    const container = document.getElementById("contacts-list");
+    container.innerHTML = "";
+
+    contacts.forEach((contact) => {
+        const div = document.createElement("div");
+
+        div.innerHTML = `
+            <span>${contact.name} · ${formatDaysAgo(contact.last_contact)}</span>
+            <button data-id="${contact.id}">💬</button>
+        `;
+
+        container.appendChild(div);
+    });
+}
+document.getElementById("add-contact").addEventListener("click", async () => {
+    const name = prompt("Nom du contact ?");
+    if (!name) return;
+
+    const today = new Date().toISOString().split("T")[0];
+
+    const { error } = await supabaseClient
+        .from("hibi_contacts")
+        .insert([
+            {
+                name: name,
+                last_contact: today,
+                user_key: "nekonimbus"
+            }
+        ]);
+
+    if (error) {
+        console.error("Erreur ajout contact :", error);
+    } else {
+        loadContacts(); // refresh liste
+    }
+});
+
 checkboxes.forEach((checkbox) => {
     checkbox.addEventListener("change", () => {
         updateScore();
@@ -328,3 +392,4 @@ moodButtons.forEach((button) => {
 });
 
 loadData();
+loadContacts();
