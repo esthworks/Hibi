@@ -117,7 +117,7 @@ async function saveData() {
     updateInsights();
 
     console.log("Sauvegardé dans Supabase");
-}
+}  
 
 async function loadData() {
     const { data, error } = await supabaseClient
