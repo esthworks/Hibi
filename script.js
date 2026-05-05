@@ -401,7 +401,7 @@ function displayContacts(contacts) {
         div.innerHTML = `
             <div>
                 <strong>${contact.name}</strong>
-                <span>${formatDaysAgo(contact.last_contact)}</span>
+    ${contact.last_contact ? `<span> · ${formatDaysAgo(contact.last_contact)}</span>` : ""}
             </div>
             <button class="contact-button" data-id="${contact.id}">💭</button>
         `;
@@ -415,7 +415,6 @@ function displayContacts(contacts) {
                 .from("hibi_contacts")
                 .update({ last_contact: today })
                 .eq("id", contact.id);
-
             if (error) {
                 console.error("Erreur update contact :", error);
             } else {
@@ -438,7 +437,7 @@ document.getElementById("add-contact").addEventListener("click", async () => {
         .insert([
             {
                 name: name,
-                last_contact: today,
+                last_contact: null,
                 user_key: "nekonimbus"
             }
         ]);
