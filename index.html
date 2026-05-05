@@ -11,7 +11,8 @@
 <main>
 
     <h1>Hibi 🪴</h1>
-
+<div id="page-home">
+    <!-- tout ton contenu actuel sauf contacts -->
     <section>
         <h2>Aujourd’hui 🧭</h2>
 
@@ -52,16 +53,23 @@
         <label><input type="checkbox" id="litiere"> Litière</label>
     </section>
 
-    <section>
-    <h3>Contacts</h3>
-    <div id="contacts-list"></div>
-    <button id="add-contact">+ Ajouter</button>
-</section>
 
     <section>
         <h3>Derniers jours</h3>
         <div id="history"></div>
     </section>
+
+</div>
+<div id="page-contacts" style="display:none;">
+    <!-- ta section contacts ici -->
+
+
+     <section>
+    <h3>Contacts</h3>
+    <div id="contacts-list"></div>
+    <button id="add-contact">+ Ajouter</button>
+</section>
+</div>
 
 </main>
 
@@ -74,6 +82,12 @@
     );
 </script>
 
+
 <script src="script.js?v=30"></script>
+
+<nav class="bottom-nav">
+    <button id="nav-home">Aujourd’hui</button>
+    <button id="nav-contacts">Contacts</button>
+</nav>
 </body>
 </html>
