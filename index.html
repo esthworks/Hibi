@@ -13,6 +13,12 @@
     <h1>Hibi 🪴</h1>
 <div id="page-home">
     <!-- tout ton contenu actuel sauf contacts -->
+     <div id="sleep-module">
+    <span>😴 Nuit difficile ?</span>
+    <button id="sleep-bad">oui</button>
+    <button id="sleep-ok">non</button>
+</div>
+
     <section>
         <h2>Aujourd’hui 🧭</h2>
 
@@ -82,12 +88,11 @@
     );
 </script>
 
-
-<script src="script.js?v=30"></script>
-
 <nav class="bottom-nav">
-    <button id="nav-home">Aujourd’hui</button>
+    <button id="nav-home" class="active-nav">Aujourd’hui</button>
     <button id="nav-contacts">Contacts</button>
 </nav>
+
+<script src="script.js?v=30"></script>
 </body>
 </html>

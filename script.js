@@ -9,6 +9,62 @@ const historyDisplay = document.getElementById("history");
 const moodButtons = document.querySelectorAll(".mood-button");
 const selectedMoodDisplay = document.getElementById("selected-mood");
 
+function shouldShowSleep() {
+    const hour = new Date().getHours();
+    return hour < 14;
+}
+
+function getSleepForToday() {
+    const todayData = appData[today] || {};
+    return todayData.sleep || null;
+}
+
+function setSleep(value) {
+    if (!appData[today]) appData[today] = {};
+
+    appData[today].sleep = value;
+    saveData();
+    updateSleepUI();
+}
+
+function updateSleepUI() {
+    const module = document.getElementById("sleep-module");
+    if (!module) return;
+
+    if (!shouldShowSleep()) {
+        module.style.display = "none";
+        return;
+    }
+
+    module.style.display = "block";
+
+    const sleep = getSleepForToday();
+
+    if (sleep === "bad") {
+        module.innerHTML = "😴 Nuit difficile";
+        return;
+    }
+
+    if (sleep === "ok") {
+        module.innerHTML = "🌙 Nuit ok";
+        return;
+    }
+
+    module.innerHTML = `
+        <span>😴 Nuit difficile ?</span>
+        <button id="sleep-bad">oui</button>
+        <button id="sleep-ok">non</button>
+    `;
+
+    document.getElementById("sleep-bad").addEventListener("click", () => {
+        setSleep("bad");
+    });
+
+    document.getElementById("sleep-ok").addEventListener("click", () => {
+        setSleep("ok");
+    });
+}
+
 function getDateKey(daysAgo = 0) {
     const date = new Date();
     date.setDate(date.getDate() - daysAgo);
@@ -340,15 +396,37 @@ function displayContacts(contacts) {
 
     contacts.forEach((contact) => {
         const div = document.createElement("div");
+        div.classList.add("contact-row");
 
         div.innerHTML = `
-            <span>${contact.name} · ${formatDaysAgo(contact.last_contact)}</span>
-            <button data-id="${contact.id}">💬</button>
+            <div>
+                <strong>${contact.name}</strong>
+                <span>${formatDaysAgo(contact.last_contact)}</span>
+            </div>
+            <button class="contact-button" data-id="${contact.id}">💭</button>
         `;
+
+        const button = div.querySelector("button");
+
+        button.addEventListener("click", async () => {
+            const today = getDateKey(0);
+
+            const { error } = await supabaseClient
+                .from("hibi_contacts")
+                .update({ last_contact: today })
+                .eq("id", contact.id);
+
+            if (error) {
+                console.error("Erreur update contact :", error);
+            } else {
+                loadContacts();
+            }
+        });
 
         container.appendChild(div);
     });
 }
+
 document.getElementById("add-contact").addEventListener("click", async () => {
     const name = prompt("Nom du contact ?");
     if (!name) return;
@@ -393,3 +471,25 @@ moodButtons.forEach((button) => {
 
 loadData();
 loadContacts();
+
+const navHome = document.getElementById("nav-home");
+const navContacts = document.getElementById("nav-contacts");
+const pageHome = document.getElementById("page-home");
+const pageContacts = document.getElementById("page-contacts");
+
+navHome.addEventListener("click", () => {
+    pageHome.style.display = "block";
+    pageContacts.style.display = "none";
+
+    navHome.classList.add("active-nav");
+    navContacts.classList.remove("active-nav");
+});
+
+navContacts.addEventListener("click", () => {
+    pageHome.style.display = "none";
+    pageContacts.style.display = "block";
+
+    navContacts.classList.add("active-nav");
+    navHome.classList.remove("active-nav");
+});
+updateSleepUI();

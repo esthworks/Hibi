@@ -118,3 +118,51 @@ p {
 #history .details {
     font-size: 13px;
 }
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #f3f2ee;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 0;
+    box-shadow: 0 -5px 15px rgba(0,0,0,0.1);
+}
+
+.bottom-nav button {
+    background: none;
+    border: none;
+    font-size: 16px;
+}
+.contact-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.contact-row:last-child {
+    border-bottom: none;
+}
+
+.contact-row strong {
+    display: block;
+    font-size: 17px;
+}
+
+.contact-row span {
+    display: block;
+    font-size: 14px;
+    opacity: 0.7;
+    margin-top: 2px;
+}
+
+.contact-button {
+    border: none;
+    background: transparent;
+    font-size: 22px;
+    cursor: pointer;
+    padding: 6px;
+}
