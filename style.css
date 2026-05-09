@@ -170,6 +170,11 @@ p {
     font-weight: 500;
 }
 
+#page-contacts h3 {
+    font-size: 24px;
+    margin-bottom: 18px;
+}
+
 .contact-row {
     display: flex;
     justify-content: space-between;
@@ -184,7 +189,7 @@ p {
 
 .contact-row strong {
     display: block;
-    font-size: 17px;
+    font-size: 16px;
 }
 
 .contact-row span {
