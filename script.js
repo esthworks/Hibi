@@ -51,10 +51,10 @@ function updateSleepUI() {
     }
 
     module.innerHTML = `
-        <span>😴 Nuit difficile ?</span>
-        <button id="sleep-bad">oui</button>
-        <button id="sleep-ok">non</button>
-    `;
+    <span>😴 Ta nuit</span>
+    <button id="sleep-bad">😴 difficile</button>
+    <button id="sleep-ok">🌙 bonne</button>
+`;
 
     document.getElementById("sleep-bad").addEventListener("click", () => {
         setSleep("bad");
@@ -116,7 +116,7 @@ function updateScore() {
 }
 
 function getTodayDataFromScreen() {
-    const todayData = {};
+    const todayData = appData[today] || {};
 
     checkboxes.forEach((checkbox) => {
         todayData[checkbox.id] = checkbox.checked;
